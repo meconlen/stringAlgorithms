@@ -11,7 +11,7 @@ Implmentation of the following algorithms in C++
 
 The algorithms are templated code which only requiring copying the C++ header files 
 
-To build the tests and examples run 
+To build the tests and examples you will need a system with autotools and CUnit. 
 
     $ autoreconf -i 
     $ ./configure 
