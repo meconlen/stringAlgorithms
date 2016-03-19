@@ -10,7 +10,7 @@ AC_PROG_CPP
 AM_PROG_AR
 AC_HEADER_STDC
 
-CXXFLAGS="$CXXFLAGS --std=c++11"
+CXXFLAGS="$CXXFLAGS --std=c++11 -Wall -Werror"
 LDFLAGS="$LDFLAGS"
 
 case $host_os in

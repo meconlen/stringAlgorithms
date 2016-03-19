@@ -18,7 +18,8 @@ int main(int argc, char *argv[])
 
    if((nw_suite = CU_add_suite("Needleman-Wunsch Suite", init_nw_suite, clean_nw_suite)) == nullptr) goto error1;
 
-   if((CU_add_test(nw_suite, "nw", nwScoreMatrix_test)) == nullptr) goto error1;
+   if((CU_add_test(nw_suite, "NeedleMan-Wunsch score matrix", nwScoreMatrix_test)) == nullptr) goto error1;
+   if((CU_add_test(nw_suite, "Needleman-Wunsch", nw_test)) == nullptr) goto error1;
 
    CU_basic_set_mode(CU_BRM_VERBOSE);
    CU_basic_run_tests();
