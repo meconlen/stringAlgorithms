@@ -42,15 +42,11 @@ namespace stringAlgorithms {
 
    } // local namespace
 
-
-   // template<typename P = int16_t, typename I, typename F>
-   // std::vector<std::vector<P>> nw_score_matrix(I xb, I xe, I yb, I ye, 
-   //    std::function<typename P (typename std::iterator_traits<I>::value_type, typename std::iterator_traits<I>::value_type)> &&score_function, 
-   //    P ID = -1, P S = -1, P M = 1)
-
    // Compute the Needleman-Wunsch score matrix on a type 
+   // look at use of std::function on large strings sometime
    template<typename P = int16_t, typename I>
-   std::vector<std::vector<P>> nw_score_matrix(I xb, I xe, I yb, I ye, std::function<P(typename std::iterator_traits<I>::value_type, typename std::iterator_traits<I>::value_type)> &&score_function, P ID = -1, P S = -1, P M = 1)
+   std::vector<std::vector<P>> nw_score_matrix(I xb, I xe, I yb, I ye, 
+      std::function<P (typename std::iterator_traits<I>::value_type, typename std::iterator_traits<I>::value_type)> &&score_function, P ID = -1)
    {
 
       auto x_size = std::distance(xb, xe);
@@ -106,7 +102,7 @@ namespace stringAlgorithms {
 
       scoring::plus_minus_one matchScoring;
 
-      std::vector<std::vector<int16_t>> matrix = nw_score_matrix(x.begin(), x.end(), y.begin(), y.end(), matchScoring);
+      std::vector<std::vector<int16_t>> matrix = nw_score_matrix(x.begin(), x.end(), y.begin(), y.end(), std::function<int16_t(char, char)>(matchScoring));
       std::vector<std::vector<int16_t>> expectedResult = {  {  0, -1, -2, -3, -4, -5, -6, -7 },
                                                             { -1,  1,  0, -1, -2, -3, -4, -5 },
                                                             { -2,  0,  0,  1,  0, -1, -2, -3 },
