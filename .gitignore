@@ -26,3 +26,25 @@
 *.exe
 *.out
 *.app
+
+# autotools output
+Makefile
+Makefile.in
+aclocal.m4
+ar-lib
+autom4te.cache/
+compile
+config.guess
+config.h
+config.h.in
+config.log
+config.status
+config.sub
+configure
+depcomp
+install-sh
+missing
+stamp-h1
+
+# Because OS X
+.DS_Store

@@ -1,0 +1,7 @@
+# autotools output
+.deps/
+Makefile
+Makefile.in
+
+# object files and executables 
+test
