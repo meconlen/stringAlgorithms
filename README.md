@@ -13,8 +13,6 @@ The algorithms are templated code which only requiring copying the C++ header fi
 
 To build the tests and examples run 
 
-$ autoreconf -i 
-
-$ ./configure 
-
-$ make
+    $ autoreconf -i 
+    $ ./configure 
+    $ make
