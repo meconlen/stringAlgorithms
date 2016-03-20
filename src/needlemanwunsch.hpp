@@ -5,7 +5,10 @@
 #include <functional>
 #include <iostream>
 #include <iterator>
+#include <string>
 #include <vector>
+
+#include "stringoutput.hpp"
 
 #ifdef HAVE_CUNIT_CUNIT_H
 #include <CUnit/Basic.h>
@@ -13,46 +16,26 @@
 
 namespace stringAlgorithms {
 
-   namespace {
-
-      // useful for printing vectors  
-      template<typename T>
-      std::ostream& operator<<(std::ostream& os, const std::vector<T>& v)
-      {
-         os << "{ ";
-         for(auto i = v.begin(); i != v.end(); i++) {
-            os << *i; 
-            if(i+1 != v.end()) {
-               os << ", ";
-            } else {
-               os << " }";
-            }
-         }
-         return os;
-      }
-
-      // useful for printing matricies
-      template<typename T>
-      std::ostream& operator<<(std::ostream& os, const std::vector<std::vector<T>>& m)
-      {
-         for(auto &i : m) {
-            std::cout << i << std::endl;
-         }
-         return os;
-      }
-
-   } // local namespace
-
    // Compute the Needleman-Wunsch score matrix on a type 
    // look at use of std::function on large strings sometime
    template<typename P = int16_t, typename I>
    std::vector<std::vector<P>> nw_score_matrix(I xb, I xe, I yb, I ye, 
-      std::function<P (typename std::iterator_traits<I>::value_type, typename std::iterator_traits<I>::value_type)> &&score_function, P ID = -1)
+      std::function<P (typename std::iterator_traits<I>::value_type, typename std::iterator_traits<I>::value_type)> &&score_function, P ID = -1, P MAX = 0)
    {
-
       auto x_size = std::distance(xb, xe);
       auto y_size = std::distance(yb, ye);
 
+      // detect if computation will overflow for type P
+      // This assumes that things fit inside a uint64_t. 
+
+      if(MAX > 0) {
+         uint64_t    maxAdjustment = MAX;
+         uint64_t    maxScore = std::min({ std::abs(std::numeric_limits<P>::max()), std::abs(std::numeric_limits<P>::min()) });
+         uint64_t    maxStringLength = std::max({ x_size, y_size }); 
+         if(maxAdjustment * maxScore <= maxStringLength) {
+            throw std::overflow_error("Score type not large enough for Needleman-Wunsch score");
+         }
+      }
       std::vector<std::vector<P>> score(x_size + 1, std::vector<P>(y_size + 1, 0));
 
       score[0][0] = 0;
@@ -181,6 +164,8 @@ namespace stringAlgorithms {
       std::vector<std::string> result(2, std::string());
    
       scoring::plus_minus_one matchScoring;
+
+      // Either use a back_inserter() or declare a string of length x.size() + y.size() for each as the result could be all indels
 
       NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(result[0]), std::back_inserter(result[1]), std::function<int16_t(char, char)>(matchScoring));
 
