@@ -16,12 +16,32 @@
 
 namespace stringAlgorithms {
 
+   namespace scoring {
+
+      auto plus_minus_one = [](const char &x, const char &y) -> int16_t { return x == y ? 1 : -1; };
+   }
+
+   // given a function F that takes two iterators I, PP<F, I>::type is the type of the return type of the function 
+   // this can be used to deduce the return type of the function to determine what the type of the score matrix 
+   // elements will be 
+
+      template<typename F, typename I>
+      struct PP {
+         typedef typename std::decay<typename std::result_of<
+            F(typename std::iterator_traits<I>::value_type, typename std::iterator_traits<I>::value_type)>::type
+         >::type type;
+      };
+
    // Compute the Needleman-Wunsch score matrix on a type 
    // look at use of std::function on large strings sometime
-   template<typename P = int16_t, typename I>
-   std::vector<std::vector<P>> nw_score_matrix(I xb, I xe, I yb, I ye, 
-      std::function<P (typename std::iterator_traits<I>::value_type, typename std::iterator_traits<I>::value_type)> &&score_function, P ID = -1, P MAX = 0)
+   
+   template<typename I, typename F>
+   std::vector<std::vector< typename PP<F, I>::type >> nw_score_matrix(I xb, I xe, I yb, I ye, 
+      F &&score_function, typename PP<F, I>::type ID = -1, typename PP<F, I>::type MAX = 0)
    {
+
+      typedef typename PP<F,I>::type P;
+      
       auto x_size = std::distance(xb, xe);
       auto y_size = std::distance(yb, ye);
 
@@ -58,18 +78,13 @@ namespace stringAlgorithms {
       return score;
    }
 
-   namespace scoring {
-      struct plus_minus_one {
-         template<typename R = int16_t, typename T>
-         R operator()(const T &x, const T &y) { return x == y ? 1 : -1; }
-      };
-   }
-
-   template<typename P = int16_t, typename I, typename BI>
+   template<typename I, typename BI, typename F>
    void NeedlemanWunsch(I xb, I xe, I yb, I ye, BI wb, BI zb,  
-      std::function<P (typename std::iterator_traits<I>::value_type, typename std::iterator_traits<I>::value_type)> &&score_function, 
-      const typename std::iterator_traits<I>::value_type &&delChar = '-', P ID = -1)
+      F &&score_function, 
+      const typename std::iterator_traits<I>::value_type &&delChar = '-', typename PP<F, I>::type ID = -1)
    {
+      typedef typename PP<F,I>::type P;
+
       std::vector<std::vector<typename std::iterator_traits<I>::value_type>> result(2, std::vector<typename std::iterator_traits<I>::value_type>());
 
       std::vector<std::vector<P>> score = nw_score_matrix(xb, xe, yb, ye, std::move(score_function), ID);
@@ -132,9 +147,7 @@ namespace stringAlgorithms {
       std::string x = "GATTACA";
       std::string y = "GCATGCU";
 
-      scoring::plus_minus_one matchScoring;
-
-      std::vector<std::vector<int16_t>> matrix = nw_score_matrix(x.begin(), x.end(), y.begin(), y.end(), std::function<int16_t(char, char)>(matchScoring));
+      std::vector<std::vector<int16_t>> matrix = nw_score_matrix(x.begin(), x.end(), y.begin(), y.end(), scoring::plus_minus_one);
       std::vector<std::vector<int16_t>> expectedResult = {  {  0, -1, -2, -3, -4, -5, -6, -7 },
                                                             { -1,  1,  0, -1, -2, -3, -4, -5 },
                                                             { -2,  0,  0,  1,  0, -1, -2, -3 },
@@ -163,18 +176,45 @@ namespace stringAlgorithms {
 
       std::vector<std::string> result(2, std::string());
    
-      scoring::plus_minus_one matchScoring;
-
       // Either use a back_inserter() or declare a string of length x.size() + y.size() for each as the result could be all indels
 
-      NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(result[0]), std::back_inserter(result[1]), std::function<int16_t(char, char)>(matchScoring));
-
+      // tests with a lambda
+      NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(result[0]), std::back_inserter(result[1]), scoring::plus_minus_one);
       CU_ASSERT(result == expectedResult);
       if(result != expectedResult) {
          std::cout << std::endl;
          std::cout << "result[0] = " << result[0] << std::endl;
          std::cout << "result[1] = " << result[1] << std::endl;
       }
+      result[0].erase(); result[1].erase();
+
+      struct plus_minus_one_functor {
+         int16_t operator()(char a, char b) { return a == b ? 1 : -1; };
+      };
+
+      plus_minus_one_functor pmf;
+
+      NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(result[0]), std::back_inserter(result[1]), pmf);
+      CU_ASSERT(result == expectedResult);
+      if(result != expectedResult) {
+         std::cout << std::endl;
+         std::cout << "result[0] = " << result[0] << std::endl;
+         std::cout << "result[1] = " << result[1] << std::endl;
+      }
+      result[0].erase(); result[1].erase();
+
+
+      auto pmf_function = std::function<int16_t(char, char)>(pmf);
+      NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(result[0]), std::back_inserter(result[1]), pmf_function);
+      CU_ASSERT(result == expectedResult);
+      if(result != expectedResult) {
+         std::cout << std::endl;
+         std::cout << "result[0] = " << result[0] << std::endl;
+         std::cout << "result[1] = " << result[1] << std::endl;
+      }
+      result[0].erase(); result[1].erase();
+
+
    }
 
 #endif
