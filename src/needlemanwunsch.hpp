@@ -162,6 +162,13 @@ namespace stringAlgorithms {
       return;
    }
 
+
+   // used as a function pointer to test being passed to NeedlemanWunsch
+   int16_t nw_test_pmofp(char a, char b) {
+      return a == b ? 1 : -1;
+   }
+
+
    void nw_test(void)
    {
       std::string x = "GATTACA";
@@ -192,6 +199,7 @@ namespace stringAlgorithms {
          int16_t operator()(char a, char b) { return a == b ? 1 : -1; };
       };
 
+      // test with a functor
       plus_minus_one_functor pmf;
 
       NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(result[0]), std::back_inserter(result[1]), pmf);
@@ -204,8 +212,20 @@ namespace stringAlgorithms {
       result[0].erase(); result[1].erase();
 
 
+      // test std::function
       auto pmf_function = std::function<int16_t(char, char)>(pmf);
       NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(result[0]), std::back_inserter(result[1]), pmf_function);
+      CU_ASSERT(result == expectedResult);
+      if(result != expectedResult) {
+         std::cout << std::endl;
+         std::cout << "result[0] = " << result[0] << std::endl;
+         std::cout << "result[1] = " << result[1] << std::endl;
+      }
+      result[0].erase(); result[1].erase();
+
+
+      // function pointer
+      NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(result[0]), std::back_inserter(result[1]), nw_test_pmofp);
       CU_ASSERT(result == expectedResult);
       if(result != expectedResult) {
          std::cout << std::endl;

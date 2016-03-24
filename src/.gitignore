@@ -7,3 +7,8 @@ Makefile.in
 nw_bench
 nw_example
 test
+
+# compiler outputs
+*.bc
+*.ii
+*.s
