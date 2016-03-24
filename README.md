@@ -70,4 +70,8 @@ This depends on how C is output and is likely suboptimal for non-character types
 
 ## Notes
 
-When computing the score algorithm for Needleman Wunsch the matrix is a std::vector<std::vector<T>> where T is the return type of the callable type F. It's important to ensure that the return type has enough space to store the score of the largest magnitude that might be computed.  
+When computing the score algorithm for Needleman Wunsch the matrix is a std::vector<std::vector<T>> where T is the return type of the callable type F. It's important to ensure that the return type has enough space to store the score of the largest magnitude that might be computed. 
+
+## Version 
+
+The version will be held below 1.0 until both Needleman-Wunsch and Hirschberg's are implemented.  
