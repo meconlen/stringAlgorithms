@@ -53,7 +53,7 @@ terminals.
 
 + I is a sequential iterator 
 + BI is a back inserter
-+ F is a callable object 
++ F is a callable type 
 + delChar is the character to use to indicate a deletion. If the iterators do not point to a char then you should probably override this
 + ID is the penalty for an indel
 
@@ -68,4 +68,6 @@ And
 
 This depends on how C is output and is likely suboptimal for non-character types unless you overload the output function 
 
+## Notes
 
+When computing the score algorithm for Needleman Wunsch the matrix is a std::vector<std::vector<T>> where T is the return type of the callable type F. It's important to ensure that the return type has enough space to store the score of the largest magnitude that might be computed.  
