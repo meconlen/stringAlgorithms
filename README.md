@@ -51,14 +51,14 @@ terminals.
     void NeedlemanWunsch(I xb, I xe, I yb, I ye, BI wb, BI zb,  
        F &&score_function, const typename std::iterator_traits<I>::value_type &&delChar = '-', typename PP<F, I>::type ID = -1)
 
-+ I is an sequential iterator 
++ I is a sequential iterator 
 + BI is a back inserter
 + F is a callable object 
 + delChar is the character to use to indicate a deletion. If the iterators do not point to a char then you should probably override this
 + ID is the penalty for an indel
 
 And
-    
+
     template<template<typename, typename...> class T, typename C, typename... Args>
     void displayDiff(T<C, Args...> a, T<C, Args...> b, C delChar = '-')
 
