@@ -4,4 +4,11 @@ Makefile
 Makefile.in
 
 # object files and executables 
+nw_bench
+nw_example
 test
+
+# compiler outputs
+*.bc
+*.ii
+*.s

@@ -1,0 +1,2 @@
+V 0.2
+	Implemented Needleman-Wunsch and displayDiff to compute minimum edits and display the differences. 
