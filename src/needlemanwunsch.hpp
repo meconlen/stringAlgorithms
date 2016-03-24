@@ -8,9 +8,9 @@
 #include <string>
 #include <vector>
 
-#include "stringoutput.hpp"
 
 #ifdef HAVE_CUNIT_CUNIT_H
+#include "stringoutput.hpp"
 #include <CUnit/Basic.h>
 #endif
 
@@ -80,8 +80,7 @@ namespace stringAlgorithms {
 
    template<typename I, typename BI, typename F>
    void NeedlemanWunsch(I xb, I xe, I yb, I ye, BI wb, BI zb,  
-      F &&score_function, 
-      const typename std::iterator_traits<I>::value_type &&delChar = '-', typename PP<F, I>::type ID = -1)
+      F &&score_function, const typename std::iterator_traits<I>::value_type &&delChar = '-', typename PP<F, I>::type ID = -1)
    {
       typedef typename PP<F,I>::type P;
 

@@ -3,6 +3,7 @@
 #include <string>
 
 #include "needlemanwunsch.hpp"
+#include "stringoutput.hpp"
 
 using stringAlgorithms::NeedlemanWunsch;
 using stringAlgorithms::displayDiff;

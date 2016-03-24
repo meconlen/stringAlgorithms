@@ -31,8 +31,8 @@ namespace stringAlgorithms {
       return os;
    }
 
-   // this is going to get templated and then specialized so I'm leaving it here. 
-   void displayDiff(std::string a, std::string b) 
+   template<template<typename, typename...> class T, typename C, typename... Args>
+   void displayDiff(T<C, Args...> a, T<C, Args...> b, C delChar = '-')
    {
       enum outputColors { BLACK = 0, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, NORMAL };
       char colorStrings[][6] = {
@@ -52,10 +52,10 @@ namespace stringAlgorithms {
       std::ostringstream as, bs;
 
       while(a_cur != a.end() && b_cur != b.end()) {
-         if(*a_cur == '-') {
+         if(*a_cur == delChar) {
             as << *a_cur;
             bs << colorStrings[CYAN] << *b_cur;
-         } else if(*b_cur == '-') {
+         } else if(*b_cur == delChar) {
             as << colorStrings[CYAN] << *a_cur << colorStrings[NORMAL];
             bs << *b_cur;
          } else if(*a_cur != *b_cur) {
