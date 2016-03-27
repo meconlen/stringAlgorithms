@@ -14,30 +14,16 @@
 #include <CUnit/Basic.h>
 #endif
 
+#include "stringUtility.hpp"
+
 namespace stringAlgorithms {
-
-   namespace scoring {
-
-      auto plus_minus_one = [](const char &x, const char &y) -> int16_t { return x == y ? 1 : -1; };
-   }
-
-   // given a function F that takes two iterators I, PP<F, I>::type is the type of the return type of the function 
-   // this can be used to deduce the return type of the function to determine what the type of the score matrix 
-   // elements will be 
-
-      template<typename F, typename I>
-      struct PP {
-         typedef typename std::decay<typename std::result_of<
-            F(typename std::iterator_traits<I>::value_type, typename std::iterator_traits<I>::value_type)>::type
-         >::type type;
-      };
 
    // Compute the Needleman-Wunsch score matrix on a type 
    // look at use of std::function on large strings sometime
    
    template<typename I, typename F>
-   std::vector<std::vector< typename PP<F, I>::type >> nw_score_matrix(I xb, I xe, I yb, I ye, 
-      F &&score_function, typename PP<F, I>::type ID = -1, typename PP<F, I>::type MAX = 0)
+   std::vector<std::vector< typename PP<F, I>::type >> 
+   nw_score_matrix(I xb, I xe, I yb, I ye, F &&score_function, typename PP<F, I>::type ID = -1, typename PP<F, I>::type MAX = 0)
    {
 
       typedef typename PP<F,I>::type P;
@@ -80,7 +66,7 @@ namespace stringAlgorithms {
 
    template<typename I, typename BI, typename F>
    void NeedlemanWunsch(I xb, I xe, I yb, I ye, BI wb, BI zb,  
-      F &&score_function, const typename std::iterator_traits<I>::value_type &&delChar = '-', typename PP<F, I>::type ID = -1)
+      F &&score_function, const typename std::iterator_traits<I>::value_type delChar = '-', typename PP<F, I>::type ID = -1)
    {
       typedef typename PP<F,I>::type P;
 
