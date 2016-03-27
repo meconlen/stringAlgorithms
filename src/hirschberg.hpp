@@ -60,6 +60,27 @@ namespace stringAlgorithms {
       return top;
    }
 
+   namespace {
+      template<typename I>
+      int_fast64_t partition(I lb, I le, I rb, I re) {
+         auto L_cur = lb;
+         auto R_cur = re - 1;
+         auto ymid = 0;
+         auto curMax = *L_cur + *R_cur;
+         auto size = std::distance(lb, le);
+         L_cur++; R_cur--;
+         for(auto i = 1; i < size; i++) {
+            auto curSum = *L_cur + *R_cur;
+            if(curSum > curMax) {
+               ymid = i;
+               curMax = curSum;
+            }
+            L_cur++; R_cur--;
+         }
+         return ymid;
+      }
+   }
+
    template<typename I, typename BI, typename F>
    void Hirschberg(I xb, I xe, I yb, I ye, BI &&wb, BI &&zb,
       F &&score_function, const typename std::iterator_traits<I>::value_type delChar = '-', typename PP<F, I>::type ID = -1)
@@ -93,19 +114,21 @@ namespace stringAlgorithms {
          auto ScoreR = nwScore(x_reverse.begin(), x_reverse.end(), y_reverse.begin(), y_reverse.end(), score_function, ID);
 
          // partitionY 
-         auto L_cur = ScoreL.begin();
-         auto R_cur = ScoreR.rbegin();
-         auto ymid = 0;
-         auto curMax = *L_cur + *R_cur;
-         L_cur ++; R_cur++;
-         for(auto i = 1; i < ScoreL.size(); i++) {
-            auto curSum = *L_cur + *R_cur;
-            if(curSum > curMax) {
-               ymid = i;
-               curMax = curSum;
-            }
-            L_cur++; R_cur++;
-         }
+         // auto L_cur = ScoreL.begin();
+         // auto R_cur = ScoreR.rbegin();
+         // auto ymid = 0;
+         // auto curMax = *L_cur + *R_cur;
+         // L_cur ++; R_cur++;
+         // for(auto i = 1; i < ScoreL.size(); i++) {
+         //    auto curSum = *L_cur + *R_cur;
+         //    if(curSum > curMax) {
+         //       ymid = i;
+         //       curMax = curSum;
+         //    }
+         //    L_cur++; R_cur++;
+         // }
+
+         auto ymid = partition(ScoreL.begin(), ScoreL.end(), ScoreR.begin(), ScoreR.end());
 
          Hirschberg(xb, xb+xmid, yb, yb+ymid, wb, zb, score_function, delChar, ID);
          Hirschberg(xb+xmid, xe, yb+ymid, ye, wb, zb, score_function, delChar, ID);
@@ -154,7 +177,6 @@ namespace stringAlgorithms {
 
       std::vector<std::string> result(2, std::string());
 
-std::cout << std::endl;
       Hirschberg(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(result[0]), std::back_inserter(result[1]), scoring::plus_minus_one);
 
       CU_ASSERT(result == expectedResult);
@@ -164,6 +186,30 @@ std::cout << std::endl;
          std::cout << "result[1] = " << result[1] << std::endl;
       }
       return;
+   }
+
+
+   void hirschberg_2_test(void)
+   {
+      std::string x = "AGTACGCA";
+      std::string y = "TATGC";
+
+      std::vector<std::string> expectedResult = {
+         "AGTACGCA",
+         "--TATGC-"
+      };
+      std::vector<std::string> result(2, std::string());
+
+      Hirschberg(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(result[0]), std::back_inserter(result[1]), scoring::plus_minus_one);
+
+      CU_ASSERT(result == expectedResult);
+      if(result != expectedResult) {
+         std::cout << std::endl;
+         std::cout << "result[0] = " << result[0] << std::endl;
+         std::cout << "result[1] = " << result[1] << std::endl;
+      }
+      return;
+
    }
 
 #endif // HAVE_CUNIT_CUNIT_H

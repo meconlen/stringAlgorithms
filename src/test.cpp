@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
    if((hirschberg_suite = CU_add_suite("Hirschberg Suite", init_hirschberg_suite, clean_hirschberg_suite)) == nullptr) goto error1;
    if((CU_add_test(hirschberg_suite, "NeedleMan-Wunsch score row", hirschberg_nwScore_test)) == nullptr) goto error1;
    if((CU_add_test(hirschberg_suite, "Hirschberg", hirschberg_test)) == nullptr) goto error1;
+   if((CU_add_test(hirschberg_suite, "Hirschberg 2", hirschberg_2_test)) == nullptr) goto error1;
 
 
    CU_basic_set_mode(CU_BRM_VERBOSE);
