@@ -5,6 +5,7 @@ Makefile.in
 
 # object files and executables 
 display_diff_example
+hirschberg_bench
 nw_bench
 nw_example
 test
@@ -13,3 +14,10 @@ test
 *.bc
 *.ii
 *.s
+
+# valgrind outputs
+callgrind.*
+
+# symbols
+
+*.dSYM/
