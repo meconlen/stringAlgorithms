@@ -14,3 +14,10 @@ test
 *.bc
 *.ii
 *.s
+
+# valgrind outputs
+callgrind.*
+
+# symbols
+
+*.dSYM/
