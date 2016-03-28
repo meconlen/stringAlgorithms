@@ -116,5 +116,6 @@ namespace stringAlgorithms {
       std::cout << std::endl;
       return;
    }
+
 } // stringAlgorithm
 #endif
