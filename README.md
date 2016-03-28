@@ -6,6 +6,7 @@ Implmentation of the following algorithms in C++
 
 * Needleman-Wunsch
 * Hirschberg
+# Longest Common Subsequence (using Hirschberg)
 
 ## Installation 
 
@@ -89,6 +90,27 @@ terminals.
 + ID is the penalty for an indel
 + deleted_value is the character to use to indicate a deletion. If the iterators do not point to a char then you should probably override this
 
+
+### longest_common_subsequence
+
+Note: I implemented this using Hirschberg since by the time the CPU disadvantage becomes substantial the memory advantage is probably worthwhile
+You can easily replace it with Needleman-Wunsch
+
+    template<typename I, typename BI>
+    void longest_common_subsequence(I x_begin, I x_end, I y_begin, I y_end, BI z_back, 
+       typename std::iterator_traits<I>::value_type deleted_value = '-')
+
+#### Template Parameters
+
++ I is a sequential iterator
++ BI is a back inserter 
+
+#### Function Parameters
+
++ x_begin, x_end are the begin and end of the first container
++ y_begin, y_end are the begin and end of the second container
++ z_back is a back inserter to store the longest common subsequence 
++ deleted_value is the value used to indicate deletions  
 
 ### display_diff
 
