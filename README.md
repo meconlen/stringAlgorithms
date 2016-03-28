@@ -5,7 +5,7 @@
 Implmentation of the following algorithms in C++
 
 * Needleman-Wunsch
-* Hirschberg (eventually)
+* Hirschberg
 
 ## Installation 
 
@@ -25,7 +25,7 @@ The scoring function for match/changed characters is defined by plus_minus_one a
 (functor, function pointer, lambda, std::function). Lambda's appear to be the fastest by a good margin though 
 locally defined functors are reasonably cloes.  
 
-The displayDiff() function will display the two strings hilighting the differences via cyan and red coloring on most
+The display_diff() function will display the two strings hilighting the differences via cyan and red coloring on most
 terminals. 
 
 
@@ -47,24 +47,66 @@ terminals.
 
 ## Definitions 
 
+### NeedlemanWunsch
+
     template<typename I, typename BI, typename F>
-    void NeedlemanWunsch(I xb, I xe, I yb, I ye, BI wb, BI zb,  
-       F &&score_function, const typename std::iterator_traits<I>::value_type &&delChar = '-', typename PP<F, I>::type ID = -1)
+    void NeedlemanWunsch(I x_begin, I x_end, I y_begin, I y_end, BI w_back, BI z_back, F &&score_function, typename PP<F, I>::type ID = -1,
+       const typename std::iterator_traits<I>::value_type deleted_value = '-')
+
+#### Template Parameters 
 
 + I is a sequential iterator 
 + BI is a back inserter
 + F is a callable type 
-+ delChar is the character to use to indicate a deletion. If the iterators do not point to a char then you should probably override this
+
+#### Function Parameters
+
++ x_begin, x_end are the begin and end of the first container
++ y_begin, y_end are the begin and end of the second container
++ w_back and z_back are back inserters to containers which will contain the strings with indels 
++ score_function is a callable object which will take two elements pointed to by I and return the penalty for editing from one to the next 
 + ID is the penalty for an indel
++ deleted_value is the character to use to indicate a deletion. If the iterators do not point to a char then you should probably override this
 
-And
+### Hirschberg
 
-    template<template<typename, typename...> class T, typename C, typename... Args>
-    void displayDiff(T<C, Args...> a, T<C, Args...> b, C delChar = '-')
+    template<typename I, typename BI, typename F>
+    void Hirschberg(I x_begin, I x_end, I y_begin, I y_end, BI &&w_back, BI &&z_back, F &&score_function, typename PP<F, I>::type ID = -1,
+       const typename std::iterator_traits<I>::value_type deleted_value = '-')
 
-* T is the container type 
-* C is the type of the delChar which indicates a deletion 
-* Args is a place holder for the structures additional arguments 
+#### Template Parameters
+
++ I is a sequential iterator
++ BI is a back inserter 
++ F is a callable type
+
+#### Function Parameters 
+
++ x_begin, x_end are the begin and end of the first container
++ y_begin, y_end are the begin and end of the second container
++ w_back and z_back are back inserters to containers which will contain the strings with indels 
++ score_function is a callable object which will take two elements pointed to by I and return the penalty for editing from one to the next 
++ ID is the penalty for an indel
++ deleted_value is the character to use to indicate a deletion. If the iterators do not point to a char then you should probably override this
+
+
+### display_diff
+
+   template<template<typename, typename...> class T, typename C, typename... Args>
+   void display_diff(T<C, Args...> a, T<C, Args...> b, C deleted_indicator = '-', char deleted_value = '-')
+
+#### Template Parameters
+
++ T is the container type 
++ C is the type of the delChar which indicates a deletion 
++ Args is a place holder for the structures additional arguments 
+
+#### Function Parameters
+
++ a and b are containers 
++ deleted_indicator is the value that indicates an indel
++ deleted_value is the value output when a indel is indicated 
+
 
 This depends on how C is output and is likely suboptimal for non-character types unless you overload the output function 
 
