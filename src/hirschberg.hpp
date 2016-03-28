@@ -113,21 +113,6 @@ namespace stringAlgorithms {
 
          auto ScoreR = nwScore(x_reverse.begin(), x_reverse.end(), y_reverse.begin(), y_reverse.end(), score_function, ID);
 
-         // partitionY 
-         // auto L_cur = ScoreL.begin();
-         // auto R_cur = ScoreR.rbegin();
-         // auto ymid = 0;
-         // auto curMax = *L_cur + *R_cur;
-         // L_cur ++; R_cur++;
-         // for(auto i = 1; i < ScoreL.size(); i++) {
-         //    auto curSum = *L_cur + *R_cur;
-         //    if(curSum > curMax) {
-         //       ymid = i;
-         //       curMax = curSum;
-         //    }
-         //    L_cur++; R_cur++;
-         // }
-
          auto ymid = partition(ScoreL.begin(), ScoreL.end(), ScoreR.begin(), ScoreR.end());
 
          Hirschberg(xb, xb+xmid, yb, yb+ymid, wb, zb, score_function, delChar, ID);

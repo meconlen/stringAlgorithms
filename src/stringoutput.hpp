@@ -45,7 +45,7 @@ namespace stringAlgorithms {
    };
 
    template<template<typename, typename...> class T, typename C, typename... Args>
-   void displayDiff(T<C, Args...> a, T<C, Args...> b, C delIndicator = '-', char delChar = '-')
+   void display_diff(T<C, Args...> a, T<C, Args...> b, C delIndicator = '-', char delChar = '-')
    {
 
       auto a_cur = a.begin(), b_cur = b.begin();
@@ -87,7 +87,7 @@ namespace stringAlgorithms {
    }
 
    template<>
-   void displayDiff(std::string a, std::string b, char delIndicator, char delChar)
+   void display_diff(std::string a, std::string b, char delIndicator, char delChar)
    {
      auto a_cur = a.begin(), b_cur = b.begin();
 
