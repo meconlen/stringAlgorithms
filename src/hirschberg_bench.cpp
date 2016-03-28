@@ -5,10 +5,10 @@
 
 #include <unistd.h>
 
-#include "needlemanwunsch.hpp"
+#include "hirschberg.hpp"
 #include "stringoutput.hpp"
 
-using stringAlgorithms::NeedlemanWunsch;
+using stringAlgorithms::Hirschberg;
 using stringAlgorithms::display_diff;
 using stringAlgorithms::scoring::plus_minus_one;
 
@@ -68,13 +68,13 @@ int main(int argc, char *argv[])
 
             // plus_minus_one matchScoring;   
 
-            NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one);
+            Hirschberg(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one);
             s.erase(); t.erase();
 
-            NeedlemanWunsch(x.begin(), x.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one);
+            Hirschberg(x.begin(), x.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one);
             s.erase(); t.erase();
 
-            NeedlemanWunsch(y.begin(), y.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one);
+            Hirschberg(y.begin(), y.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one);
             s.erase(); t.erase();
          }
          break;
@@ -84,13 +84,13 @@ int main(int argc, char *argv[])
 
             // plus_minus_one matchScoring;   
 
-            NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one_p);
+            Hirschberg(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one_p);
             s.erase(); t.erase();
 
-            NeedlemanWunsch(x.begin(), x.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one_p);
+            Hirschberg(x.begin(), x.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one_p);
             s.erase(); t.erase();
 
-            NeedlemanWunsch(y.begin(), y.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one_p);
+            Hirschberg(y.begin(), y.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one_p);
             s.erase(); t.erase();
          }
          break;
@@ -100,13 +100,13 @@ int main(int argc, char *argv[])
 
             // plus_minus_one matchScoring;   
 
-            NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(s), std::back_inserter(t), pmf);
+            Hirschberg(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(s), std::back_inserter(t), pmf);
             s.erase(); t.erase();
 
-            NeedlemanWunsch(x.begin(), x.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), pmf);
+            Hirschberg(x.begin(), x.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), pmf);
             s.erase(); t.erase();
 
-            NeedlemanWunsch(y.begin(), y.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), pmf);
+            Hirschberg(y.begin(), y.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), pmf);
             s.erase(); t.erase();
          }
          break;
@@ -116,13 +116,13 @@ int main(int argc, char *argv[])
 
             // plus_minus_one matchScoring;   
 
-            NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(s), std::back_inserter(t), pmf_function);
+            Hirschberg(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(s), std::back_inserter(t), pmf_function);
             s.erase(); t.erase();
 
-            NeedlemanWunsch(x.begin(), x.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), pmf_function);
+            Hirschberg(x.begin(), x.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), pmf_function);
             s.erase(); t.erase();
 
-            NeedlemanWunsch(y.begin(), y.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), pmf_function);
+            Hirschberg(y.begin(), y.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), pmf_function);
             s.erase(); t.erase();
          }
          break;   

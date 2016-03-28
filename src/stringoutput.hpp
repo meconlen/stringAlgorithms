@@ -45,7 +45,7 @@ namespace stringAlgorithms {
    };
 
    template<template<typename, typename...> class T, typename C, typename... Args>
-   void display_diff(T<C, Args...> a, T<C, Args...> b, C delIndicator = '-', char delChar = '-')
+   void display_diff(T<C, Args...> a, T<C, Args...> b, C deleted_indicator = '-', char deleted_value = '-')
    {
 
       auto a_cur = a.begin(), b_cur = b.begin();
@@ -56,12 +56,12 @@ namespace stringAlgorithms {
       bs << "[ ";
 
       while(a_cur != a.end() && b_cur != b.end()) {
-         if(*a_cur == delIndicator) {
-            as << delChar;
+         if(*a_cur == deleted_indicator) {
+            as << deleted_value;
             bs << colorStrings[CYAN] << *b_cur << colorStrings[NORMAL];
-         } else if(*b_cur == delIndicator) {
+         } else if(*b_cur == deleted_indicator) {
             as << colorStrings[CYAN] << *a_cur << colorStrings[NORMAL];
-            bs << delChar;
+            bs << deleted_value;
          } else if(*a_cur != *b_cur) {
             as << colorStrings[RED] << *a_cur << colorStrings[NORMAL];
             bs << colorStrings[RED] << *b_cur << colorStrings[NORMAL];
@@ -87,17 +87,17 @@ namespace stringAlgorithms {
    }
 
    template<>
-   void display_diff(std::string a, std::string b, char delIndicator, char delChar)
+   void display_diff(std::string a, std::string b, char deleted_indicator, char deleted_value)
    {
      auto a_cur = a.begin(), b_cur = b.begin();
 
       std::ostringstream as, bs;
 
       while(a_cur != a.end() && b_cur != b.end()) {
-         if(*a_cur == delChar) {
+         if(*a_cur == deleted_value) {
             as << *a_cur;
             bs << colorStrings[CYAN] << *b_cur << colorStrings[NORMAL];
-         } else if(*b_cur == delChar) {
+         } else if(*b_cur == deleted_value) {
             as << colorStrings[CYAN] << *a_cur << colorStrings[NORMAL];
             bs << *b_cur;
          } else if(*a_cur != *b_cur) {
