@@ -4,6 +4,7 @@ Makefile
 Makefile.in
 
 # object files and executables 
+display_diff_example
 nw_bench
 nw_example
 test

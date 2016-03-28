@@ -6,7 +6,7 @@
 #include "stringoutput.hpp"
 
 using stringAlgorithms::NeedlemanWunsch;
-using stringAlgorithms::displayDiff;
+using stringAlgorithms::display_diff;
 
 int main(int argc, char *argv[])
 {
@@ -26,17 +26,17 @@ int main(int argc, char *argv[])
 
    // lambda
    NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one_lambda);
-   displayDiff(s, t);
+   display_diff(s, t);
    s.erase(); t.erase();
 
    // functor
    NeedlemanWunsch(x.begin(), x.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), pmf);
-   displayDiff(s, t);
+   display_diff(s, t);
    s.erase(); t.erase();
 
    // std::function
    NeedlemanWunsch(y.begin(), y.end(), z.begin(), z.end(), std::back_inserter(s), std::back_inserter(t), std::function<int16_t(char, char)>(pmf));
-   displayDiff(s, t);
+   display_diff(s, t);
 
    return 0;
 }

@@ -1,5 +1,5 @@
 AC_PREREQ(2.61)
-AC_INIT([stringAlgorithms], [0.3], [mike@conlen.org])
+AC_INIT([stringAlgorithms], [0.4], [mike@conlen.org])
 AC_CONFIG_SRCDIR([src/test.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CANONICAL_HOST
