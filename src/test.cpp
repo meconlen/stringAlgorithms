@@ -4,6 +4,8 @@
 
 #include "needlemanwunsch.hpp"
 #include "hirschberg.hpp"
+#include "lcs.hpp"
+
 #ifdef HAVE_CUNIT_CUNIT_H
    #include <CUnit/Basic.h>
 #endif
@@ -14,7 +16,8 @@ int main(int argc, char *argv[])
 {
 #ifdef HAVE_CUNIT_CUNIT_H
    CU_pSuite   nw_suite = nullptr,
-               hirschberg_suite = nullptr;
+               hirschberg_suite = nullptr,
+               lcs_suite = nullptr;
 
    if(CUE_SUCCESS != CU_initialize_registry()) goto error1;
 
@@ -28,6 +31,8 @@ int main(int argc, char *argv[])
    if((CU_add_test(hirschberg_suite, "Hirschberg", hirschberg_test)) == nullptr) goto error1;
    if((CU_add_test(hirschberg_suite, "Hirschberg 2", hirschberg_2_test)) == nullptr) goto error1;
 
+   if((lcs_suite = CU_add_suite("Longest Common Subsequence Suite", init_lcs_suite, clean_lcs_suite)) == nullptr) goto error1;
+   if((CU_add_test(lcs_suite, "LCS", lcs_test)) == nullptr) goto error1;
 
    CU_basic_set_mode(CU_BRM_VERBOSE);
    CU_basic_run_tests();
