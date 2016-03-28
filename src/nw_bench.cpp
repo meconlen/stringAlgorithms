@@ -8,7 +8,7 @@
 #include "needlemanwunsch.hpp"
 
 using stringAlgorithms::NeedlemanWunsch;
-using stringAlgorithms::displayDiff;
+using stringAlgorithms::display_diff;
 using stringAlgorithms::scoring::plus_minus_one;
 
 int16_t plus_minus_one_p(const char &x, const char &y) {
