@@ -117,19 +117,5 @@ namespace stringAlgorithms {
       return;
    }
 
-   template<template<typename, typename...> class T, class C, typename... Args>
-   void display_longest_common_subsequence(T<C, Args...> a, T<C, Args...> b, C deleted_indicator = '-')
-   {
-      auto a_cur = a.begin(), b_cur = b.begin();
-      std::ostringstream   os;
-      while(a_cur != a.end() && b_cur != b.end()) {
-         if(*a_cur == *b_cur) {
-            os << *a_cur;
-         }
-         a_cur++; b_cur++;
-      }
-      std::cout << os.str() << std::endl;
-   }
-
 } // stringAlgorithm
 #endif
