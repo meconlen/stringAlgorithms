@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
    uint64_t delIndicator = -1;
 
    // lambda
-   NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one, delIndicator);
+   NeedlemanWunsch(x.begin(), x.end(), y.begin(), y.end(), std::back_inserter(s), std::back_inserter(t), plus_minus_one, -1, delIndicator);
    display_diff(s, t, delIndicator);
 
    return 0;

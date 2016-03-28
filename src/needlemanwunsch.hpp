@@ -23,39 +23,28 @@ namespace stringAlgorithms {
    
    template<typename I, typename F>
    std::vector<std::vector< typename PP<F, I>::type >> 
-   nw_score_matrix(I xb, I xe, I yb, I ye, F &&score_function, typename PP<F, I>::type ID = -1, typename PP<F, I>::type MAX = 0)
+   nw_score_matrix(I x_begin, I x_end, I y_begin, I y_end, F &&score_function, typename PP<F, I>::type ID = -1)
    {
 
       typedef typename PP<F,I>::type P;
       
-      auto x_size = std::distance(xb, xe);
-      auto y_size = std::distance(yb, ye);
+      auto x_size = std::distance(x_begin, x_end);
+      auto y_size = std::distance(y_begin, y_end);
 
-      // detect if computation will overflow for type P
-      // This assumes that things fit inside a uint64_t. 
-
-      if(MAX > 0) {
-         uint64_t    maxAdjustment = MAX;
-         uint64_t    maxScore = std::min({ std::abs(std::numeric_limits<P>::max()), std::abs(std::numeric_limits<P>::min()) });
-         uint64_t    maxStringLength = std::max({ x_size, y_size }); 
-         if(maxAdjustment * maxScore <= maxStringLength) {
-            throw std::overflow_error("Score type not large enough for Needleman-Wunsch score");
-         }
-      }
       std::vector<std::vector<P>> score(x_size + 1, std::vector<P>(y_size + 1, 0));
 
       score[0][0] = 0;
       for(auto j = 1; j <= y_size; j++) score[0][j] = score[0][j-1] + ID; 
 
-      auto x_cur = xb;
+      auto x_cur = x_begin;
       for(auto i = 1; i <= x_size; i++) {
          score[i][0] = score[i-1][0] + ID;
-         auto y_cur = yb;
+         auto y_cur = y_begin;
          for(auto j = 1; j <= y_size; j++) {
-            P scoreSub = score[i-1][j-1] + score_function(*x_cur, *y_cur);
-            P scoreDel = score[i-1][j] + ID;
-            P scoreIns = score[i][j-1] + ID;
-            score[i][j] = std::max({scoreSub, scoreDel, scoreIns});
+            P score_sub = score[i-1][j-1] + score_function(*x_cur, *y_cur);
+            P score_del = score[i-1][j] + ID;
+            P score_ins = score[i][j-1] + ID;
+            score[i][j] = std::max({score_sub, score_del, score_ins});
             y_cur++;
          }
          x_cur++;
@@ -65,20 +54,21 @@ namespace stringAlgorithms {
    }
 
    template<typename I, typename BI, typename F>
-   void NeedlemanWunsch(I xb, I xe, I yb, I ye, BI wb, BI zb,  
-      F &&score_function, const typename std::iterator_traits<I>::value_type delChar = '-', typename PP<F, I>::type ID = -1)
+   void NeedlemanWunsch(I x_begin, I x_end, I y_begin, I y_end, BI w_back, BI z_back, F &&score_function, typename PP<F, I>::type ID = -1,
+      const typename std::iterator_traits<I>::value_type deleted_value = '-')
    {
       typedef typename PP<F,I>::type P;
+      typedef typename std::iterator_traits<I>::value_type I_type;
 
-      std::vector<std::vector<typename std::iterator_traits<I>::value_type>> result(2, std::vector<typename std::iterator_traits<I>::value_type>());
+      std::vector<std::vector<I_type>> result(2, std::vector<I_type>());
 
-      std::vector<std::vector<P>> score = nw_score_matrix(xb, xe, yb, ye, std::move(score_function), ID);
+      std::vector<std::vector<P>> score = nw_score_matrix(x_begin, x_end, y_begin, y_end, std::move(score_function), ID);
 
-      int_fast64_t   i = std::distance(xb, xe);
-      int_fast64_t   j = std::distance(yb, ye);
+      int_fast64_t   i = std::distance(x_begin, x_end);
+      int_fast64_t   j = std::distance(y_begin, y_end);
 
-      auto x_cur = xe - 1;
-      auto y_cur = ye - 1;
+      auto x_cur = x_end - 1;
+      auto y_cur = y_end - 1;
 
       // work our way back to [0][0] constructing the strings in reverse order
       // we first see if we arrived by an match/substitution, if so up left
@@ -94,12 +84,12 @@ namespace stringAlgorithms {
          }
          else if((i > 0) && (score[i][j] == score[i-1][j] + ID)) {
             result[0].push_back(*x_cur);
-            result[1].push_back(delChar);
+            result[1].push_back(deleted_value);
             i--;     
             x_cur--;   
          }
          else {
-            result[0].push_back(delChar);
+            result[0].push_back(deleted_value);
             result[1].push_back(*y_cur);
             j--;
             y_cur--;      
@@ -107,8 +97,8 @@ namespace stringAlgorithms {
       }
       for(auto &i : result) std::reverse(i.begin(), i.end()); 
 
-      std::copy(result[0].begin(), result[0].end(), wb);
-      std::copy(result[1].begin(), result[1].end(), zb);
+      std::copy(result[0].begin(), result[0].end(), w_back);
+      std::copy(result[1].begin(), result[1].end(), z_back);
 
       return;
    }
