@@ -6,6 +6,7 @@ Makefile.in
 # object files and executables 
 display_diff_example
 hirschberg_bench
+lcs_example
 nw_bench
 nw_example
 test
